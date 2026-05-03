@@ -23,6 +23,7 @@ align-items: center;
 justify-content: center;
 margin: 0;
 height: 100vh;
+width: 100vw;
 overflow: hidden;
 }
 
@@ -33,38 +34,39 @@ flex-direction: column;
 align-items: center;
 text-align: center;
 background: rgba(77, 51, 25, 0.9);
-padding: 50px 80px;
-border-radius: 20px;
-border: 5px solid var(--slu-scarlet);
-box-shadow: 0 0 50px rgba(0,0,0,0.8);
+padding: 80px 120px;
+border-radius: 30px;
+border: 8px solid var(--slu-scarlet);
+box-shadow: 0 0 80px rgba(0,0,0,0.8);
 z-index: 10;
+max-width: 1600px;
 }
 
 .screen.active { display: flex; }
 
 .screen h1 {
-font-size: 4rem;
+font-size: 6rem;
 color: white;
-margin: 0 0 10px 0;
+margin: 0 0 15px 0;
 text-transform: uppercase;
-text-shadow: 4px 4px 0px var(--slu-scarlet);
+text-shadow: 6px 6px 0px var(--slu-scarlet);
 }
 
-.screen h2 { color: var(--feud-gold); font-size: 2.5rem; margin: 0 0 30px 0; }
-.screen h3 { color: white; font-size: 1.8rem; margin: 0 0 40px 0; font-weight: normal;}
+.screen h2 { color: var(--feud-gold); font-size: 3.5rem; margin: 0 0 40px 0; }
+.screen h3 { color: white; font-size: 2.5rem; margin: 0 0 50px 0; font-weight: normal;}
 
 .action-btn {
 background: var(--feud-gold);
 color: black;
-font-size: 1.5rem;
-padding: 15px 40px;
+font-size: 2.2rem;
+padding: 20px 60px;
 border: none;
 border-radius: 50px;
 cursor: pointer;
 font-weight: bold;
 text-transform: uppercase;
 transition: transform 0.2s, background 0.2s;
-box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+box-shadow: 0 6px 15px rgba(0,0,0,0.5);
 }
 
 .action-btn:hover { transform: scale(1.05); background: white; }
@@ -75,42 +77,43 @@ display: none;
 flex-direction: column;
 align-items: center;
 width: 100%;
+max-width: 1800px;
 }
 
-#game-header { text-align: center; margin-bottom: 20px; }
+#game-header { text-align: center; margin-bottom: 30px; }
 
-.badge-container { display: flex; gap: 20px; justify-content: center; }
+.badge-container { display: flex; gap: 30px; justify-content: center; }
 
 .badge {
 background: var(--slu-scarlet);
 color: white;
-padding: 10px 25px;
-font-size: 1.2rem;
+padding: 15px 35px;
+font-size: 1.8rem;
 border-radius: 50px;
-border: 3px solid white;
-box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+border: 4px solid white;
+box-shadow: 0 6px 15px rgba(0,0,0,0.5);
 }
 .badge.match-badge { background: var(--slu-brown); border-color: var(--feud-gold); color: var(--feud-gold);}
 
 .board-container {
-width: 90%;
-max-width: 1000px;
+width: 95%;
+max-width: 1500px;
 background: var(--slu-brown);
-padding: 20px;
-border: 8px solid var(--feud-gold);
-border-radius: 30px;
-box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+padding: 30px;
+border: 10px solid var(--feud-gold);
+border-radius: 40px;
+box-shadow: inset 0 0 40px rgba(0,0,0,0.5), 0 15px 40px rgba(0,0,0,0.8);
 }
 
 .question-display {
 background: var(--feud-blue);
-padding: 15px;
+padding: 25px;
 text-align: center;
-font-size: 1.5rem;
-border: 4px solid white;
-border-radius: 15px;
-margin-bottom: 20px;
-min-height: 40px;
+font-size: 2.2rem;
+border: 6px solid white;
+border-radius: 20px;
+margin-bottom: 30px;
+min-height: 80px;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -119,54 +122,54 @@ justify-content: center;
 .answers-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
-gap: 15px;
+gap: 20px;
 }
 
 .answer-slot {
-height: 65px;
+height: 90px;
 background: linear-gradient(to bottom, #0044cc, #002266);
-border: 3px solid white;
-border-radius: 8px;
+border: 4px solid white;
+border-radius: 10px;
 display: flex;
 align-items: center;
 justify-content: space-between;
-padding: 0 15px;
-font-size: 1.2rem;
+padding: 0 25px;
+font-size: 1.6rem;
 cursor: pointer;
 position: relative;
 text-transform: uppercase;
 }
 
 .answer-slot.revealed { background: linear-gradient(to bottom, #eeeeee, #cccccc); color: black; }
-.answer-slot .points { background: var(--bg-dark); color: var(--feud-gold); padding: 5px 15px; border-radius: 5px; display: none; font-size: 1.3rem; }
+.answer-slot .points { background: var(--bg-dark); color: var(--feud-gold); padding: 10px 20px; border-radius: 8px; display: none; font-size: 1.8rem; }
 .answer-slot.revealed .points { display: block; }
-.answer-number { background: var(--feud-gold); color: black; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; position: absolute; left: 50%; transform: translateX(-50%); }
+.answer-number { background: var(--feud-gold); color: black; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; position: absolute; left: 50%; transform: translateX(-50%); }
 .answer-slot.revealed .answer-number { display: none; }
 .ans-text { display: none; width: 80%; }
 .answer-slot.revealed .ans-text { display: block; }
 
 /* --- CONTROLS & SCORES --- */
-.controls { margin-top: 25px; display: flex; gap: 20px; align-items: center; }
+.controls { margin-top: 35px; display: flex; gap: 40px; align-items: center; }
 
 .score-box {
 background: black;
-border: 3px solid var(--feud-gold);
-border-radius: 10px;
-padding: 10px 15px;
+border: 4px solid var(--feud-gold);
+border-radius: 15px;
+padding: 15px 25px;
 text-align: center;
-min-width: 180px;
+min-width: 250px;
 }
 
-.team-name { font-size: 1.2rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; border-bottom: 1px dashed transparent; outline: none; transition: border 0.2s;}
-.team-name:focus { border-bottom: 1px dashed var(--feud-gold); color: white; }
-.score-box .val { font-size: 2.5rem; color: white; }
+.team-name { font-size: 1.8rem; color: #aaa; margin-bottom: 10px; text-transform: uppercase; border-bottom: 2px dashed transparent; outline: none; transition: border 0.2s;}
+.team-name:focus { border-bottom: 2px dashed var(--feud-gold); color: white; }
+.score-box .val { font-size: 4rem; color: white; }
 .score-box .val.gold { color: var(--feud-gold); }
 
-.strike-zone { font-size: 3.5rem; color: #ff3333; letter-spacing: 15px; min-width: 160px; text-align: center; text-shadow: 2px 2px 0px black; }
+.strike-zone { font-size: 5rem; color: #ff3333; letter-spacing: 20px; min-width: 220px; text-align: center; text-shadow: 3px 3px 0px black; }
 
-button.sm-btn { padding: 8px 15px; font-weight: bold; font-size: 0.9rem; cursor: pointer; background: var(--feud-gold); border: none; border-radius: 5px; text-transform: uppercase; margin-top: 10px; }
+button.sm-btn { padding: 12px 20px; font-weight: bold; font-size: 1.2rem; cursor: pointer; background: var(--feud-gold); border: none; border-radius: 8px; text-transform: uppercase; margin-top: 15px; }
 button.sm-btn:hover { background: white; }
-button.strike-btn { background: #ff3333; color: white; padding: 12px 25px; font-size: 1.1rem; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+button.strike-btn { background: #ff3333; color: white; padding: 18px 35px; font-size: 1.6rem; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 button.strike-btn:hover { background: #ff6666; }
 </style>
 </head>
@@ -227,7 +230,7 @@ button.strike-btn:hover { background: #ff6666; }
 <div class="controls">
 <button class="strike-btn" onclick="addStrike()">STRIKE [ X ]</button>
 <div class="strike-zone" id="strikes"></div>
-<button class="action-btn" style="padding: 12px 25px; font-size: 1.1rem;" onclick="nextRound()" id="next-btn">Next Round</button>
+<button class="action-btn" style="padding: 18px 40px; font-size: 1.6rem;" onclick="nextRound()" id="next-btn">Next Round</button>
 </div>
 </div>
 

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLU Esports Family Feud - Tournament Edition</title>
+<style>
+:root {
+--slu-scarlet: #AF1E2D;
+--slu-brown: #4D3319;
+--feud-blue: #003399;
+--feud-gold: #FFD700;
+--bg-dark: #121212;
+}
+
+body {
+background: radial-gradient(circle at center, #2a2a2a 0%, var(--bg-dark) 100%);
+color: white;
+font-family: 'Arial Black', sans-serif;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+margin: 0;
+height: 100vh;
+overflow: hidden;
+}
+
+/* --- SCREENS --- */
+.screen {
+display: none;
+flex-direction: column;
+align-items: center;
+text-align: center;
+background: rgba(77, 51, 25, 0.9);
+padding: 50px 80px;
+border-radius: 20px;
+border: 5px solid var(--slu-scarlet);
+box-shadow: 0 0 50px rgba(0,0,0,0.8);
+z-index: 10;
+}
+
+.screen.active { display: flex; }
+
+.screen h1 {
+font-size: 4rem;
+color: white;
+margin: 0 0 10px 0;
+text-transform: uppercase;
+text-shadow: 4px 4px 0px var(--slu-scarlet);
+}
+
+.screen h2 { color: var(--feud-gold); font-size: 2.5rem; margin: 0 0 30px 0; }
+.screen h3 { color: white; font-size: 1.8rem; margin: 0 0 40px 0; font-weight: normal;}
+
+.action-btn {
+background: var(--feud-gold);
+color: black;
+font-size: 1.5rem;
+padding: 15px 40px;
+border: none;
+border-radius: 50px;
+cursor: pointer;
+font-weight: bold;
+text-transform: uppercase;
+transition: transform 0.2s, background 0.2s;
+box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.action-btn:hover { transform: scale(1.05); background: white; }
+
+/* --- GAME BOARD STYLES --- */
+#game-container {
+display: none;
+flex-direction: column;
+align-items: center;
+width: 100%;
+}
+
+#game-header { text-align: center; margin-bottom: 20px; }
+
+.badge-container { display: flex; gap: 20px; justify-content: center; }
+
+.badge {
+background: var(--slu-scarlet);
+color: white;
+padding: 10px 25px;
+font-size: 1.2rem;
+border-radius: 50px;
+border: 3px solid white;
+box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.badge.match-badge { background: var(--slu-brown); border-color: var(--feud-gold); color: var(--feud-gold);}
+
+.board-container {
+width: 90%;
+max-width: 1000px;
+background: var(--slu-brown);
+padding: 20px;
+border: 8px solid var(--feud-gold);
+border-radius: 30px;
+box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.question-display {
+background: var(--feud-blue);
+padding: 15px;
+text-align: center;
+font-size: 1.5rem;
+border: 4px solid white;
+border-radius: 15px;
+margin-bottom: 20px;
+min-height: 40px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.answers-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
+}
+
+.answer-slot {
+height: 65px;
+background: linear-gradient(to bottom, #0044cc, #002266);
+border: 3px solid white;
+border-radius: 8px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 15px;
+font-size: 1.2rem;
+cursor: pointer;
+position: relative;
+text-transform: uppercase;
+}
+
+.answer-slot.revealed { background: linear-gradient(to bottom, #eeeeee, #cccccc); color: black; }
+.answer-slot .points { background: var(--bg-dark); color: var(--feud-gold); padding: 5px 15px; border-radius: 5px; display: none; font-size: 1.3rem; }
+.answer-slot.revealed .points { display: block; }
+.answer-number { background: var(--feud-gold); color: black; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; position: absolute; left: 50%; transform: translateX(-50%); }
+.answer-slot.revealed .answer-number { display: none; }
+.ans-text { display: none; width: 80%; }
+.answer-slot.revealed .ans-text { display: block; }
+
+/* --- CONTROLS & SCORES --- */
+.controls { margin-top: 25px; display: flex; gap: 20px; align-items: center; }
+
+.score-box {
+background: black;
+border: 3px solid var(--feud-gold);
+border-radius: 10px;
+padding: 10px 15px;
+text-align: center;
+min-width: 180px;
+}
+
+.team-name { font-size: 1.2rem; color: #aaa; margin-bottom: 5px; text-transform: uppercase; border-bottom: 1px dashed transparent; outline: none; transition: border 0.2s;}
+.team-name:focus { border-bottom: 1px dashed var(--feud-gold); color: white; }
+.score-box .val { font-size: 2.5rem; color: white; }
+.score-box .val.gold { color: var(--feud-gold); }
+
+.strike-zone { font-size: 3.5rem; color: #ff3333; letter-spacing: 15px; min-width: 160px; text-align: center; text-shadow: 2px 2px 0px black; }
+
+button.sm-btn { padding: 8px 15px; font-weight: bold; font-size: 0.9rem; cursor: pointer; background: var(--feud-gold); border: none; border-radius: 5px; text-transform: uppercase; margin-top: 10px; }
+button.sm-btn:hover { background: white; }
+button.strike-btn { background: #ff3333; color: white; padding: 12px 25px; font-size: 1.1rem; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+button.strike-btn:hover { background: #ff6666; }
+</style>
+</head>
+<body>
+
+<div id="title-screen" class="screen active">
+<h1>Family Feud</h1>
+<h2>Tournament Edition</h2>
+<h3>3 Matches. 9 Rounds. 1 Champion.</h3>
+<button class="action-btn" onclick="startTournament()">Start Event</button>
+</div>
+
+<div id="transition-screen" class="screen">
+<h1 id="trans-title">Match 1</h1>
+<h2 id="trans-subtitle">Semifinal A</h2>
+<h3 id="trans-desc">Winning team advances to the Championship!</h3>
+<button class="action-btn" onclick="startMatch()">Play Match</button>
+</div>
+
+<div id="winner-screen" class="screen">
+<h1 id="winner-title">MATCH OVER</h1>
+<h2 id="winner-team">Team X Wins!</h2>
+<button class="action-btn" id="next-match-btn" onclick="prepareNextMatch()">Next Match</button>
+</div>
+
+<div id="game-container">
+<div id="game-header">
+<div class="badge-container">
+<div class="badge match-badge" id="match-indicator">SEMIFINAL A</div>
+<div class="badge" id="round-indicator">ROUND 1</div>
+</div>
+</div>
+
+<div class="board-container">
+<div class="question-display" id="question">Loading...</div>
+<div class="answers-grid" id="answers-grid"></div>
+</div>
+
+<div class="controls">
+<div class="score-box">
+<div class="team-name" id="team1-name" contenteditable="true">Team 1</div>
+<div class="val" id="team1-score">0</div>
+<button class="sm-btn" onclick="awardPoints(1)">Give Bank</button>
+</div>
+
+<div class="score-box" style="border-color: white;">
+<div class="team-name" style="color: white; border: none;" id="bank-label">BANK (1x)</div>
+<div class="val gold" id="current-bank">0</div>
+</div>
+
+<div class="score-box">
+<div class="team-name" id="team2-name" contenteditable="true">Team 2</div>
+<div class="val" id="team2-score">0</div>
+<button class="sm-btn" onclick="awardPoints(2)">Give Bank</button>
+</div>
+</div>
+
+<div class="controls">
+<button class="strike-btn" onclick="addStrike()">STRIKE [ X ]</button>
+<div class="strike-zone" id="strikes"></div>
+<button class="action-btn" style="padding: 12px 25px; font-size: 1.1rem;" onclick="nextRound()" id="next-btn">Next Round</button>
+</div>
+</div>
+
+<script>
+// TOURNAMENT DATA: 3 Matches, 3 Rounds each
+const tournament = [
+{
+matchName: "Semifinal A",
+matchDesc: "Winner advances to the Championship!",
+defaultTeam1: "Team 1", defaultTeam2: "Team 2",
+rounds: [
+{ 
+  q: "Name an item you might find at a gamer's desk.", 
+  a: [
+    {text: "Keyboard", pts: 25}, 
+    {text: "Monitor", pts: 20}, 
+    {text: "Mouse", pts: 18}, 
+    {text: "Gaming Headset", pts: 16}, 
+    {text: "Mousepad / Desk Mat", pts: 13},
+    {text: "Energy Drink / Water Bottle", pts: 8}
+  ] 
+},
+{ 
+  q: "Name a specific building or landmark on the St. Lawrence University campus.", 
+  a: [
+    {text: "Appleton Arena", pts: 22}, 
+    {text: "Gunnison Memorial Chapel", pts: 18}, 
+    {text: "ODY Library", pts: 15}, 
+    {text: "Sullivan Student Center", pts: 13}, 
+    {text: "Dana Dining Hall", pts: 10},
+    {text: "Kirk Douglas Hall", pts: 9},
+    {text: "Johnson Hall of Science", pts: 7},
+    {text: "Herring-Cole Hall", pts: 6}
+  ] 
+},
+{ 
+  q: "Name something that can cause a 'Technical Pause' during an esports match.", 
+  a: [
+    {text: "Keyboard or Mouse failure", pts: 35}, 
+    {text: "Internet/Ping issues", pts: 25}, 
+    {text: "Audio / Mic problems", pts: 20}, 
+    {text: "Game/PC Crash", pts: 12}, 
+    {text: "Bathroom Break", pts: 8}
+  ] 
+}
+]
+},
+{
+matchName: "Semifinal B",
+matchDesc: "Winner advances to the Championship!",
+defaultTeam1: "Team 3", defaultTeam2: "Team 4",
+rounds: [
+{ 
+  q: "Name something that can cause \"Tilt\" during a competitive match.", 
+  a: [
+    {text: "Teammates \"Throwing\"", pts: 25}, 
+    {text: "Lag / Ping Spikes", pts: 20}, 
+    {text: "Trash Talk from the enemy", pts: 15}, 
+    {text: "Whiffing an easy shot/ability", pts: 12}, 
+    {text: "A \"Broken\" or OP character", pts: 12},
+    {text: "Losing a long win streak", pts: 10},
+    {text: "Hardware Failure (Controller/Mouse)", pts: 6}
+  ] 
+},
+{ 
+  q: "Name an excuse a fighting game competitor makes after losing a match.", 
+  a: [
+    {text: "Controller / Fight stick dropped my inputs", pts: 35}, 
+    {text: "Input lag / The monitor had delay", pts: 30}, 
+    {text: "It was a bad character matchup", pts: 20}, 
+    {text: "I dropped my combo", pts: 10}, 
+    {text: "My hands were cold", pts: 5}
+  ] 
+},
+{ 
+  q: "Name a phrase a player yells into the mic immediately after getting eliminated.", 
+  a: [
+    {text: "\"He's literally one shot!\" / \"He's 1 HP!\"", pts: 45}, 
+    {text: "\"Where is my team?!\"", pts: 25}, 
+    {text: "\"They're flanking!\" / \"Behind us!\"", pts: 15}, 
+    {text: "\"He's hacking!\" / \"Aimbot!\"", pts: 10},
+    {text: "\"Nice try.\"", pts: 5}
+  ] 
+}
+]
+},
+{
+matchName: "The Championship Match",
+matchDesc: "For all the glory!",
+defaultTeam1: "Winner Semi A", defaultTeam2: "Winner Semi B",
+rounds: [
+{ 
+  q: "Name a valid reason a gamer might suddenly go AFK (Away From Keyboard) in the middle of a match.", 
+  a: [
+    {text: "Bathroom break", pts: 26}, 
+    {text: "Getting food / water", pts: 20}, 
+    {text: "Delivery at the door / Pizza arrived", pts: 16}, 
+    {text: "Spilled a drink on their desk", pts: 12}, 
+    {text: "Pet jumped on the keyboard/desk", pts: 10},
+    {text: "Parents or roommate interrupted them", pts: 8},
+    {text: "Taking a phone call / Texting", pts: 5},
+    {text: "Wireless controller / Headset died", pts: 3}
+  ] 
+},
+{ 
+  q: "Name something a competitive gamer forgets to do because they've been playing for too long.", 
+  a: [
+    {text: "Go to sleep / Go to bed", pts: 35}, 
+    {text: "Eat a real meal", pts: 25}, 
+    {text: "Drink water", pts: 15}, 
+    {text: "Go outside / \"Touch Grass\"", pts: 12}, 
+    {text: "Use the bathroom", pts: 8},
+    {text: "Blink", pts: 5}
+  ] 
+},
+{ 
+  q: "Name one of the most popular majors for a St. Lawrence University graduate.", 
+  a: [
+    {text: "Business in the Liberal Arts", pts: 24}, 
+    {text: "Psychology", pts: 22}, 
+    {text: "Economics", pts: 22}, 
+    {text: "Political Science / Government", pts: 16}, 
+    {text: "Biology", pts: 16}
+  ] 
+}
+]
+}
+];
+
+let currentMatchIdx = 0;
+let currentRoundIdx = 0;
+let bank = 0;
+let scores = [0, 0];
+let strikes = 0;
+let currentMultiplier = 1;
+
+function hideAllScreens() { document.querySelectorAll('.screen, #game-container').forEach(s => s.classList.remove('active')); document.getElementById('game-container').style.display = 'none'; }
+
+function startTournament() {
+currentMatchIdx = 0;
+showTransitionScreen();
+}
+
+function showTransitionScreen() {
+hideAllScreens();
+const match = tournament[currentMatchIdx];
+document.getElementById('trans-title').innerText = `MATCH ${currentMatchIdx + 1}`;
+document.getElementById('trans-subtitle').innerText = match.matchName;
+document.getElementById('trans-desc').innerText = match.matchDesc;
+document.getElementById('transition-screen').classList.add('active');
+}
+
+function startMatch() {
+hideAllScreens();
+document.getElementById('game-container').style.display = 'flex';
+// Reset scores and names for new match
+scores = [0, 0];
+currentRoundIdx = 0;
+const match = tournament[currentMatchIdx];
+document.getElementById('team1-name').innerText = match.defaultTeam1;
+document.getElementById('team2-name').innerText = match.defaultTeam2;
+initBoard();
+}
+
+function initBoard() {
+const match = tournament[currentMatchIdx];
+const qObj = match.rounds[currentRoundIdx];
+document.getElementById('question').innerText = qObj.q;
+document.getElementById('match-indicator').innerText = match.matchName.toUpperCase();
+// Multiplier Logic (Round 1 = 1x, Round 2 = 2x, Round 3 = 3x)
+currentMultiplier = currentRoundIdx + 1;
+let roundText = `ROUND ${currentRoundIdx + 1}`;
+if(currentMultiplier > 1) roundText += ` (${currentMultiplier}X POINTS)`;
+document.getElementById('round-indicator').innerText = roundText;
+document.getElementById('bank-label').innerText = `BANK (${currentMultiplier}x)`;
+
+// Build Board
+const grid = document.getElementById('answers-grid');
+grid.innerHTML = '';
+strikes = 0;
+bank = 0;
+updateUI();
+
+qObj.a.forEach((item, i) => {
+const div = document.createElement('div');
+div.className = 'answer-slot';
+div.innerHTML = `<div class="answer-number">${i+1}</div><div class="ans-text">${item.text}</div><div class="points">${item.pts}</div>`;
+div.onclick = () => reveal(div, item.pts);
+grid.appendChild(div);
+});
+
+document.getElementById('next-btn').innerText = (currentRoundIdx === match.rounds.length - 1) ? "FINISH MATCH" : "NEXT ROUND";
+}
+
+function reveal(el, basePts) {
+if (!el.classList.contains('revealed')) {
+el.classList.add('revealed');
+bank += (basePts * currentMultiplier);
+updateUI();
+}
+}
+
+function addStrike() { if (strikes < 3) { strikes++; updateUI(); } }
+
+function awardPoints(team) { scores[team-1] += bank; bank = 0; updateUI(); }
+
+function nextRound() {
+currentRoundIdx++;
+if (currentRoundIdx < tournament[currentMatchIdx].rounds.length) {
+initBoard();
+} else {
+endMatch();
+}
+}
+
+function endMatch() {
+hideAllScreens();
+let team1Name = document.getElementById('team1-name').innerText;
+let team2Name = document.getElementById('team2-name').innerText;
+let winnerName = "IT'S A TIE!";
+if (scores[0] > scores[1]) winnerName = `${team1Name} WINS!`;
+if (scores[1] > scores[0]) winnerName = `${team2Name} WINS!`;
+document.getElementById('winner-title').innerText = tournament[currentMatchIdx].matchName + " OVER";
+document.getElementById('winner-team').innerText = winnerName;
+if (currentMatchIdx >= tournament.length - 1) {
+document.getElementById('winner-title').innerText = "TOURNAMENT COMPLETE";
+document.getElementById('winner-team').innerText = `🏆 ${winnerName} 🏆`;
+document.getElementById('next-match-btn').style.display = 'none';
+}
+document.getElementById('winner-screen').classList.add('active');
+}
+
+function prepareNextMatch() {
+currentMatchIdx++;
+showTransitionScreen();
+}
+
+function updateUI() {
+document.getElementById('current-bank').innerText = bank;
+document.getElementById('team1-score').innerText = scores[0];
+document.getElementById('team2-score').innerText = scores[1];
+document.getElementById('strikes').innerText = 'X '.repeat(strikes).trim();
+}
+</script>
+</body>
+</html>
